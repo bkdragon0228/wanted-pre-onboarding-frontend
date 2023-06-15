@@ -5,7 +5,7 @@ import styled from '@emotion/styled'
 interface ButtonProps {
     dataTestId : 'signup-button' | 'signin-button';
     label? : string;
-    onClick : () => void;
+    onClick? : () => void;
     type : 'button' | 'submit'
 }
 

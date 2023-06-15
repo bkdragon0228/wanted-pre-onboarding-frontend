@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 
 import styled from '@emotion/styled'
 
@@ -6,8 +6,8 @@ interface InputProps {
     dataTestId : 'email-input' | 'password-input';
     placeholder : string;
     type : 'text' | 'password';
-    errorMessage : string;
-    onChange : (value : string) => void;
+    errorMessage : string | undefined;
+    onChange : (e: ChangeEvent<HTMLInputElement & HTMLSelectElement>) => void;
 }
 
 const Input : React.FC<InputProps> = ({
@@ -20,7 +20,7 @@ const Input : React.FC<InputProps> = ({
 
     return (
         <>
-            <StyledInput  type={type} data-testid={dataTestId} placeholder={placeholder} onChange={(e) => onChange(e.target.value)} />
+            <StyledInput  type={type} data-testid={dataTestId} placeholder={placeholder} onChange={(e : ChangeEvent<HTMLInputElement & HTMLSelectElement>) => onChange(e)} />
             {errorMessage &&  <ErrorMessage>{errorMessage}</ErrorMessage>}
         </>
     );
