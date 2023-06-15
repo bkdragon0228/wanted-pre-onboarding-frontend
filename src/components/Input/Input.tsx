@@ -15,12 +15,12 @@ const Input : React.FC<InputProps> = ({
     placeholder,
     type,
     errorMessage,
-    onChange
+    onChange,
 }) => {
 
     return (
         <>
-            <input type={type} data-testid={dataTestId} placeholder={placeholder} onChange={(e) => onChange(e.target.value)} />
+            <StyledInput  type={type} data-testid={dataTestId} placeholder={placeholder} onChange={(e) => onChange(e.target.value)} />
             {errorMessage &&  <ErrorMessage>{errorMessage}</ErrorMessage>}
         </>
     );
@@ -29,5 +29,11 @@ const Input : React.FC<InputProps> = ({
 export default Input;
 
 const ErrorMessage = styled.p`
-    color : red
+    color : red;
+`
+const StyledInput = styled.input`
+    width: 700px;
+    padding: 20px 16px;
+    border: 1px solid lightgray;
+    border-radius: 20px;
 `
