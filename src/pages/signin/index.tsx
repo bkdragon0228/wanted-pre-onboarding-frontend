@@ -1,21 +1,22 @@
 import React from 'react';
 
+import styled from '@emotion/styled';
+import { RegisterForm } from '../signup/index';
+
 import { useForm } from '../../hook/useForm';
-import Axios from '../../util/httpRequest';
+import useMove from '../../hook/useMove';
 
 import Form from '../../components/Form/Form';
 import Input from '../../components/Input/Input';
 import Button from '../../components/Button/Button'
-import useMove from '../../hook/useMove';
+import Axios from '../../util/httpRequest';
 
-export interface RegisterForm {
-    email : string;
-    password : string;
-}
+type LoginForm = RegisterForm
 
-const SignupPage = () => {
+const SigninPage = () => {
     const { moveToPage } = useMove()
-    const {handleSubmit, handleChange, errors } = useForm<RegisterForm>({
+
+    const {handleSubmit, handleChange, errors } = useForm<LoginForm>({
         initialValues : {
             email : '',
             password : ''
@@ -45,15 +46,18 @@ const SignupPage = () => {
         },
         onSubmit : (data) => {
             console.log('검증 성공')
-            register(data, () => moveToPage('/signin'))
+            login(data, (value) => {
+                localStorage.setItem('accessToken' , value)
+                moveToPage('/todo')
+            })
         }
     })
 
-    const register = async (data : RegisterForm, onComplete? : () => void) => {
+    const login = async <TResponse extends { access_token : string }>(data : LoginForm, onComplete? : (value : string) => void) => {
         try {
-            const response = await Axios.use<RegisterForm>({
+            const response = await Axios.use<LoginForm, TResponse>({
                 method : 'post',
-                url : '/auth/signup',
+                url : '/auth/signin',
                 data : {
                     email : data.email,
                     password : data.password
@@ -63,11 +67,12 @@ const SignupPage = () => {
                 }
             })
 
-            console.log(response)
+            console.log(response.data.access_token)
 
             if(onComplete) {
-                onComplete()
+                onComplete(response.data.access_token)
             }
+
         } catch (error) {
             console.log(error)
         }
@@ -77,12 +82,18 @@ const SignupPage = () => {
         <Form onSubmit={handleSubmit}>
             <Input type='text' dataTestId='email-input' placeholder='이메일' errorMessage={errors.email} onChange={handleChange('email')} />
             <Input type='password' dataTestId='password-input' placeholder='비밀번호' errorMessage={errors.password} onChange={handleChange('password')} />
-            <Button dataTestId='signup-button' type='submit' label='회원가입' />
+            <RowWrapper>
+                <Button dataTestId='signin-button' type='submit' label='로그인' />
+                <Button dataTestId='signup-button' type='button' label='회원가입' onClick={() => moveToPage('/signup')}/>
+            </RowWrapper>
         </Form>
     );
 };
 
-export default SignupPage;
+export default SigninPage;
 
-
-
+const RowWrapper = styled.div`
+    display: flex;
+    flex-direction: row;
+    column-gap: 1rem;
+`

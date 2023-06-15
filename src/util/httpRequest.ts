@@ -32,7 +32,7 @@ class HttpRequest {
         );
     }
 
-    async use<TData extends Record<keyof TData, any>>({
+    async use<TData extends Record<keyof TData, any>, U extends {} = {}>({
         method,
         url,
         data,
@@ -44,7 +44,7 @@ class HttpRequest {
         headers? : RawAxiosRequestHeaders;
     }) {
 
-        return this.api({method, url, data, headers});
+        return this.api<U>({method, url, data, headers});
     }
 }
 
