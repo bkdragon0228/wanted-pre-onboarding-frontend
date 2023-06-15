@@ -1,14 +1,19 @@
 import React from 'react';
 
-import styled from '@emotion/styled'
 import { useForm } from '../../hook/useForm';
+import Axios from '../../util/httpRequest';
 
 import Form from '../../components/Form/Form';
 import Input from '../../components/Input/Input';
 import Button from '../../components/Button/Button'
 
+interface RegisterForm {
+    email : string;
+    password : string;
+}
+
 const SignupPage = () => {
-    const {handleSubmit, handleChange, errors} = useForm<{email : string; password : string;}>({
+    const {handleSubmit, handleChange, errors } = useForm<RegisterForm>({
         initialValues : {
             email : '',
             password : ''
@@ -36,16 +41,37 @@ const SignupPage = () => {
 
             }
         },
-        onSubmit : () => {
+        onSubmit : (data) => {
             console.log('검증 성공')
+            register(data)
         }
     })
+
+    const register = async (data : RegisterForm) => {
+        try {
+            const response = await Axios.use<RegisterForm>({
+                method : 'post',
+                url : '/auth/signup',
+                data : {
+                    email : data.email,
+                    password : data.password
+                },
+                headers : {
+                    "Content-Type" : 'application/json'
+                }
+            })
+
+            console.log(response)
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     return (
         <Form onSubmit={handleSubmit}>
             <Input type='text' dataTestId='email-input' placeholder='이메일' errorMessage={errors.email} onChange={handleChange('email')} />
             <Input type='password' dataTestId='password-input' placeholder='비밀번호' errorMessage={errors.password} onChange={handleChange('password')} />
-            <Button dataTestId='signup-button' type='submit' onClick={() => {}} label='회원가입' />
+            <Button dataTestId='signup-button' type='submit' label='회원가입' />
         </Form>
     );
 };
