@@ -6,6 +6,7 @@ import Axios from '../../util/httpRequest';
 import Form from '../../components/Form/Form';
 import Input from '../../components/Input/Input';
 import Button from '../../components/Button/Button'
+import useMove from '../../hook/useMove';
 
 interface RegisterForm {
     email : string;
@@ -13,6 +14,7 @@ interface RegisterForm {
 }
 
 const SignupPage = () => {
+    const { moveToPage } = useMove()
     const {handleSubmit, handleChange, errors } = useForm<RegisterForm>({
         initialValues : {
             email : '',
@@ -43,11 +45,11 @@ const SignupPage = () => {
         },
         onSubmit : (data) => {
             console.log('검증 성공')
-            register(data)
+            register(data, () => moveToPage('/signin'))
         }
     })
 
-    const register = async (data : RegisterForm) => {
+    const register = async (data : RegisterForm, onComplete? : () => void) => {
         try {
             const response = await Axios.use<RegisterForm>({
                 method : 'post',
@@ -62,6 +64,10 @@ const SignupPage = () => {
             })
 
             console.log(response)
+
+            if(onComplete) {
+                onComplete()
+            }
         } catch (error) {
             console.log(error)
         }
