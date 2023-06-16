@@ -10,10 +10,13 @@ import Form from '../../components/Form/Form';
 import Input from '../../components/Input/Input';
 import Button from '../../components/Button/Button'
 import Axios from '../../util/httpRequest';
+import useAuth from '../../hook/useAuth';
 
 type LoginForm = RegisterForm
 
 const SigninPage = () => {
+    useAuth(false)
+
     const { moveToPage } = useMove()
 
     const {handleSubmit, handleChange, errors } = useForm<LoginForm>({

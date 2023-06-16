@@ -7,6 +7,7 @@ import Form from '../../components/Form/Form';
 import Input from '../../components/Input/Input';
 import Button from '../../components/Button/Button'
 import useMove from '../../hook/useMove';
+import useAuth from '../../hook/useAuth';
 
 export interface RegisterForm {
     email : string;
@@ -14,6 +15,8 @@ export interface RegisterForm {
 }
 
 const SignupPage = () => {
+    useAuth(false)
+
     const { moveToPage } = useMove()
     const {handleSubmit, handleChange, errors } = useForm<RegisterForm>({
         initialValues : {
