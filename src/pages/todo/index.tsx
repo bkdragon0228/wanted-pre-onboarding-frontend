@@ -1,23 +1,16 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React from 'react';
+
+import styled from '@emotion/styled';
 import useAuth from '../../hook/useAuth';
-import Axios from '../../util/httpRequest';
-import Input from '../../components/Input/Input';
-import Button from '../../components/Button/Button';
 import useTodos from '../../hook/useTodos';
 
-interface Todo {
-    id : number;
-    todo : string;
-    isCompleted : boolean;
-    userId : number;
-}
-
-type Todos = Todo[]
+import Input from '../../components/Input/Input';
+import Button from '../../components/Button/Button';
 
 const TodoPage = () => {
     useAuth(true)
 
-    const {todo, todos, handleTodo, createTodo, refetchTodo} = useTodos()
+    const {todo, todos, handleTodo, createTodo, refetchTodo, deleteTodo} = useTodos()
 
     return (
         <div>
@@ -27,7 +20,11 @@ const TodoPage = () => {
             </div>
             <ul>
                 {todos.map((item) => (
-                    <li>{item.todo}</li>
+                        <Row>
+                            <input type='checkbox' checked={item.isCompleted} />
+                            <p>{item.todo}</p>
+                            <button onClick={() => deleteTodo(item.id)}>X</button>
+                        </Row>
                 ))}
             </ul>
         </div>
@@ -35,3 +32,9 @@ const TodoPage = () => {
 };
 
 export default TodoPage;
+
+const Row = styled.li`
+    display: flex;
+    flex-direction: row;
+    column-gap: 1rem;
+`

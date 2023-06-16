@@ -5,6 +5,10 @@ interface CTodo {
     todo : string;
 }
 
+type UTodo = CTodo & {
+    isCompleted : boolean
+}
+
 interface Todo {
     id : number;
     todo : string;
@@ -23,6 +27,38 @@ export default function useTodos () {
     const handleTodo = (e : ChangeEvent<HTMLInputElement & HTMLSelectElement>) =>{
         setTodo(e.target.value)
     }
+
+    // const updateTodo = useCallback(async ({
+    //     id,
+    //     todo,
+    //     isCompleted
+    // } : Partial <{
+    //     id : string;
+    //     todo : string;
+    //     isCompleted : boolean;
+    // }>) => {
+    //     if(!accessToken) return
+
+    //     const newData : Partial<UTodo> = {}
+
+    //     newData.todo = todo
+    //     newData.isCompleted = isCompleted
+
+    //     try {
+    //         const response = await Axios.use<UTodo, Todo>({
+    //             method : 'post',
+    //             url : `/todos/${id}`,
+    //             data : newData,
+    //             headers : {
+    //                 "Content-Type" : 'application/json',
+    //                 Authorization : `Bearer ${accessToken}`
+    //             }
+    //         })
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
+
+    // }, [accessToken])
 
     const createTodo = useCallback(async() => {
         if(!accessToken) return
@@ -57,11 +93,31 @@ export default function useTodos () {
                     Authorization : `Bearer ${accessToken}`
                 }
             })
+
             setTodos(resopnse.data)
         } catch (error) {
             console.log(error)
         }
     }, [accessToken, setTodos])
+
+    const deleteTodo = useCallback(async (id : number) => {
+        if(!accessToken) return
+
+        try {
+            await Axios.use({
+                method : 'delete',
+                url : `/todos/${id}`,
+                headers : {
+                    Authorization : `Bearer ${accessToken}`
+                }
+            })
+
+            setTodos((prev) => prev.filter((todo) => todo.id !== id))
+
+        } catch (error) {
+            console.log(error)
+        }
+    }, [accessToken])
 
    useEffect(() => {
     fetchTodoData()
@@ -72,6 +128,7 @@ export default function useTodos () {
         todo,
         handleTodo,
         createTodo,
+        deleteTodo,
         refetchTodo : fetchTodoData
     }
 
