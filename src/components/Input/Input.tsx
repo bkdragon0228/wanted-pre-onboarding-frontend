@@ -3,10 +3,10 @@ import React, { ChangeEvent } from 'react';
 import styled from '@emotion/styled'
 
 interface InputProps {
-    dataTestId : 'email-input' | 'password-input';
+    dataTestId : 'email-input' | 'password-input' | 'new-todo-input';
     placeholder : string;
     type : 'text' | 'password';
-    errorMessage : string | undefined;
+    errorMessage? : string | undefined;
     onChange : (e: ChangeEvent<HTMLInputElement & HTMLSelectElement>) => void;
 }
 

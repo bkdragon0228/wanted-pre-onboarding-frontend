@@ -1,6 +1,9 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import useAuth from '../../hook/useAuth';
 import Axios from '../../util/httpRequest';
+import Input from '../../components/Input/Input';
+import Button from '../../components/Button/Button';
+import useTodos from '../../hook/useTodos';
 
 interface Todo {
     id : number;
@@ -14,30 +17,19 @@ type Todos = Todo[]
 const TodoPage = () => {
     useAuth(true)
 
-    const fetchTodoData = async (accessToken : string) => {
-        if(!accessToken) return
-        try {
-            const resopnse = await Axios.use<{}, Todos>({
-                method : 'get',
-                url : '/todos',
-                headers : {
-                    Authorization : `Bearer ${accessToken}`
-                }
-            })
+    const {todo, todos, handleTodo, createTodo, refetchTodo} = useTodos()
 
-            console.log(resopnse.data)
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-    useEffect(() => {
-        const accessToken = localStorage.getItem('accessToken')
-        fetchTodoData(accessToken ? accessToken : '')
-    }, [])
     return (
         <div>
-            로그인 해야지만 접속할 수 있는 할 일 목록 페이지
+            <div>
+                <Input type='text' dataTestId='new-todo-input' placeholder='할 일을 입력해주세요.' onChange={handleTodo}/>
+                <Button type='button' dataTestId='new-todo-add-button' onClick={createTodo} label='할 일 추가'/>
+            </div>
+            <ul>
+                {todos.map((item) => (
+                    <li>{item.todo}</li>
+                ))}
+            </ul>
         </div>
     );
 };

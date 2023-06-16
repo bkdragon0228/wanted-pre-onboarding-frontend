@@ -3,7 +3,7 @@ import React from 'react';
 import styled from '@emotion/styled'
 
 interface ButtonProps {
-    dataTestId : 'signup-button' | 'signin-button';
+    dataTestId : 'signup-button' | 'signin-button' | 'new-todo-add-button';
     label? : string;
     onClick? : () => void;
     type : 'button' | 'submit'
