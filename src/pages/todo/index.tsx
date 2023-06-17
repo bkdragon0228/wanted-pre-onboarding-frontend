@@ -46,7 +46,7 @@ const Row = styled.li`
 
 const Todo = styled.p`
     min-width: 100px;
-    max-width: 200px;
+    max-width: 500px;
     text-align: center;
     &:hover {
         text-decoration: underline;

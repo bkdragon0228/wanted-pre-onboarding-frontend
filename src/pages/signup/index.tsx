@@ -18,7 +18,7 @@ const SignupPage = () => {
     useAuth(false)
 
     const { moveToPage } = useMove()
-    const {handleSubmit, handleChange, errors } = useForm<RegisterForm>({
+    const { isDisabled ,handleSubmit, handleChange, errors } = useForm<RegisterForm>({
         initialValues : {
             email : '',
             password : ''
@@ -40,7 +40,7 @@ const SignupPage = () => {
                     message : '입력해주세요.'
                 },
                 custom : {
-                    isValid : (password) => password.length > 7,
+                    isValid : (password) => password.length >= 8,
                     message : '비밀번호는 8자리 이상으로 작성해주세요.'
                 },
 
@@ -80,7 +80,7 @@ const SignupPage = () => {
         <Form onSubmit={handleSubmit}>
             <Input type='text' dataTestId='email-input' placeholder='이메일' errorMessage={errors.email} onChange={handleChange('email')} />
             <Input type='password' dataTestId='password-input' placeholder='비밀번호' errorMessage={errors.password} onChange={handleChange('password')} />
-            <Button dataTestId='signup-button' type='submit' label='회원가입' />
+            <Button dataTestId='signup-button' type='submit' label='회원가입' disabled={isDisabled} />
         </Form>
     );
 };

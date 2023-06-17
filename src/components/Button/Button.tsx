@@ -6,17 +6,19 @@ interface ButtonProps {
     dataTestId : 'signup-button' | 'signin-button' | 'new-todo-add-button';
     label? : string;
     onClick? : () => void;
-    type : 'button' | 'submit'
+    type : 'button' | 'submit';
+    disabled? : boolean;
 }
 
 const Button : React.FC<ButtonProps> = ({
     dataTestId,
     onClick,
     type,
+    disabled,
     label = '검색'
 }) => {
     return (
-       <StyledButton type={type} data-testid={dataTestId} onClick={onClick}>{label}</StyledButton>
+       <StyledButton type={type} data-testid={dataTestId} onClick={onClick} disabled={disabled}>{label}</StyledButton>
     );
 };
 
