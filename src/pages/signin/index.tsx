@@ -87,7 +87,7 @@ const SigninPage = () => {
             <Input type='password' dataTestId='password-input' value={data.password} placeholder='비밀번호' errorMessage={errors.password} onChange={handleChange('password')} />
             <RowWrapper>
                 <Button dataTestId='signin-button' type='submit' label='로그인' disabled={isDisabled} />
-                <Button dataTestId='signup-button' type='button' label='회원가입' onClick={() => moveToPage('/signup')}/>
+                <Button type='button' label='회원가입' onClick={() => moveToPage('/signup')}/>
             </RowWrapper>
         </Form>
     );

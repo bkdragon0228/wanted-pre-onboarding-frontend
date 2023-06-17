@@ -3,7 +3,7 @@ import React, { ChangeEvent } from 'react';
 import styled from '@emotion/styled'
 
 interface InputProps {
-    dataTestId : 'email-input' | 'password-input' | 'new-todo-input';
+    dataTestId : 'email-input' | 'password-input' | 'new-todo-input' | 'modify-input';
     placeholder : string;
     type : 'text' | 'password';
     errorMessage? : string | undefined;

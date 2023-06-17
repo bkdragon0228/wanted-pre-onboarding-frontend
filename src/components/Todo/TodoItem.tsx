@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useCallback, useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { Todo } from '../../hook/useTodos';
 
 import styled from '@emotion/styled';
@@ -33,7 +33,7 @@ const TodoItem : React.FC<TodoItemProps> = ({
         if(isEdit) {
             return (
                 <div>
-                    <Input type='text' dataTestId='new-todo-input' value={editValue} defaultValue={todoItem.todo} placeholder='수정할 일을 입력해주세요.' onChange={handleValue}/>
+                    <Input type='text' dataTestId='modify-input' value={editValue} defaultValue={todoItem.todo} placeholder='수정할 일을 입력해주세요.' onChange={handleValue}/>
                     <Button
                         type='button'
                         dataTestId='submit-button'
@@ -54,7 +54,8 @@ const TodoItem : React.FC<TodoItemProps> = ({
         } else {
             return (
                 <>
-                    <TodoCotents>
+                    <input type='checkbox' checked={todoItem.isCompleted} onChange={() => handleCheck({ id : todoItem.id, currentTodo : todoItem.todo, isCompleted : todoItem.isCompleted})}/>
+                    <TodoCotents isCompleted={todoItem.isCompleted}>
                         {value}
                     </TodoCotents>
                     <UpdateBtn data-testid="modify-button" onClick={handleEdit}>수정</UpdateBtn>
@@ -66,7 +67,6 @@ const TodoItem : React.FC<TodoItemProps> = ({
 
     return (
         <Row>
-            <input type='checkbox' checked={todoItem.isCompleted} onChange={() => handleCheck({ id : todoItem.id, currentTodo : todoItem.todo, isCompleted : todoItem.isCompleted})}/>
             {
                 renderTodo(isEdit, todoItem.todo)
             }
@@ -83,13 +83,13 @@ const Row = styled.li`
     align-items: center;
 `
 
-const TodoCotents = styled.p`
+const TodoCotents = styled.p<{
+    isCompleted : boolean
+}>`
     min-width: 100px;
     max-width: 500px;
     text-align: center;
-    &:hover {
-        text-decoration: underline;
-    }
+    text-decoration: ${({isCompleted}) => isCompleted ? 'line-through' : 'none'};
 `
 
 const DeleteBtn = styled.button`
