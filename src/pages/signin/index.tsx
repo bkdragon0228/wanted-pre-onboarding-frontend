@@ -19,7 +19,7 @@ const SigninPage = () => {
 
     const { moveToPage } = useMove()
 
-    const { isDisabled, handleSubmit, handleChange, errors } = useForm<LoginForm>({
+    const { isDisabled, handleSubmit, handleChange, errors, data } = useForm<LoginForm>({
         initialValues : {
             email : '',
             password : ''
@@ -83,8 +83,8 @@ const SigninPage = () => {
 
     return (
         <Form onSubmit={handleSubmit}>
-            <Input type='text' dataTestId='email-input' placeholder='이메일' errorMessage={errors.email} onChange={handleChange('email')} />
-            <Input type='password' dataTestId='password-input' placeholder='비밀번호' errorMessage={errors.password} onChange={handleChange('password')} />
+            <Input type='text' dataTestId='email-input' value={data.email} placeholder='이메일' errorMessage={errors.email} onChange={handleChange('email')} />
+            <Input type='password' dataTestId='password-input' value={data.password} placeholder='비밀번호' errorMessage={errors.password} onChange={handleChange('password')} />
             <RowWrapper>
                 <Button dataTestId='signin-button' type='submit' label='로그인' disabled={isDisabled} />
                 <Button dataTestId='signup-button' type='button' label='회원가입' onClick={() => moveToPage('/signup')}/>

@@ -28,16 +28,17 @@ export default function useTodos () {
         setTodo(e.target.value)
     }
 
-    const updateTodo = useCallback(async (id : number) => {
+    const updateTodo = useCallback(async <T extends string>(id : number, value : T, isCompleted : boolean) => {
         if(!accessToken) return
 
         const newData : UTodo = {}
 
-        if(todo) newData.todo = todo
+        newData.todo = value
+        newData.isCompleted = isCompleted
 
         try {
             const response = await Axios.use<UTodo, Todo>({
-                method : 'post',
+                method : 'put',
                 url : `/todos/${id}`,
                 data : newData,
                 headers : {
@@ -45,11 +46,20 @@ export default function useTodos () {
                     Authorization : `Bearer ${accessToken}`
                 }
             })
+
+            const newTodos = [...todos].map((todo) => {
+                if(todo.id === id) {
+                    return response.data
+                }
+                return todo
+            })
+
+            setTodos(newTodos)
         } catch (error) {
             console.log(error)
         }
 
-    }, [accessToken, todo])
+    }, [accessToken, todos])
 
     const checkTodo = useCallback(async (id : number, currentTodo : string ,isCompleted : boolean) => {
         if(!accessToken) return
@@ -101,7 +111,7 @@ export default function useTodos () {
             })
 
             setTodos((prev) => [...prev, response.data])
-            // setTodo('')
+            setTodo('')
         } catch (error) {
             console.log(error)
         }
@@ -154,6 +164,7 @@ export default function useTodos () {
         createTodo,
         deleteTodo,
         checkTodo,
+        updateTodo,
         refetchTodo : fetchTodoData
     }
 

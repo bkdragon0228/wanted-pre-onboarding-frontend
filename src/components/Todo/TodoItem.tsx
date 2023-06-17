@@ -1,20 +1,29 @@
-import React, { useState } from 'react';
+import React, { ChangeEvent, useCallback, useState } from 'react';
 import { Todo } from '../../hook/useTodos';
 
 import styled from '@emotion/styled';
+import Input from '../Input/Input';
+import Button from '../Button/Button';
 
 interface TodoItemProps {
-    todo : Todo;
+    todoItem : Todo;
     handleCheck : <T extends {id : number, currentTodo : string; isCompleted : boolean}>(arg : T) => void;
-    handleDelete : <T extends {id : number}>(arg : T) => void
+    handleDelete : <T extends {id : number}>(arg : T) => void;
+    handleUpdate : <T extends {id : number, value : string, isCompleted : boolean}>(arg : T) => void;
 }
 
 const TodoItem : React.FC<TodoItemProps> = ({
-    todo,
+    todoItem,
     handleCheck,
-    handleDelete
+    handleDelete,
+    handleUpdate
 }) => {
     const [isEdit, setIsEdit] = useState<boolean>(false)
+    const [editValue, setEditValue] = useState<string>(todoItem.todo)
+
+    const handleValue = (e: ChangeEvent<HTMLInputElement & HTMLSelectElement>) => {
+        setEditValue(e.target.value)
+    }
 
     const handleEdit = () => {
         setIsEdit((prev) => !prev)
@@ -24,26 +33,43 @@ const TodoItem : React.FC<TodoItemProps> = ({
         if(isEdit) {
             return (
                 <div>
-                    수정해야지~
+                    <Input type='text' dataTestId='new-todo-input' value={editValue} defaultValue={todoItem.todo} placeholder='수정할 일을 입력해주세요.' onChange={handleValue}/>
+                    <Button
+                        type='button'
+                        dataTestId='submit-button'
+                        label='수정'
+                        disabled={editValue.length <= 0}
+                        onClick={() => {
+                            handleUpdate({
+                                id : todoItem.id,
+                                value : editValue,
+                                isCompleted : todoItem.isCompleted
+                            })
+                            setIsEdit(false)
+                        }}
+                    />
+                    <UpdateBtn data-testid="cancel-button" onClick={handleEdit}>취소</UpdateBtn>
                 </div>
             )
         } else {
             return (
-                <TodoCotents>
-                    {value}
-                </TodoCotents>
+                <>
+                    <TodoCotents>
+                        {value}
+                    </TodoCotents>
+                    <UpdateBtn data-testid="modify-button" onClick={handleEdit}>수정</UpdateBtn>
+                    <DeleteBtn data-testid="delete-button" onClick={() => handleDelete({id : todoItem.id})} >X</DeleteBtn>
+                </>
             )
         }
     }
 
     return (
         <Row>
-            <input type='checkbox' checked={todo.isCompleted} onChange={() => handleCheck({ id : todo.id, currentTodo : todo.todo, isCompleted : todo.isCompleted})}/>
+            <input type='checkbox' checked={todoItem.isCompleted} onChange={() => handleCheck({ id : todoItem.id, currentTodo : todoItem.todo, isCompleted : todoItem.isCompleted})}/>
             {
-                renderTodo(isEdit, todo.todo)
+                renderTodo(isEdit, todoItem.todo)
             }
-            <UpdateBtn data-testid="modify-button" onClick={handleEdit}>{isEdit ? '수정 취소' : '수정'}</UpdateBtn>
-            <DeleteBtn data-testid="delete-button" onClick={() => handleDelete({id : todo.id})} >X</DeleteBtn>
         </Row>
     );
 };

@@ -8,6 +8,8 @@ interface InputProps {
     type : 'text' | 'password';
     errorMessage? : string | undefined;
     onChange : (e: ChangeEvent<HTMLInputElement & HTMLSelectElement>) => void;
+    value : string;
+    defaultValue? : string;
 }
 
 const Input : React.FC<InputProps> = ({
@@ -16,11 +18,19 @@ const Input : React.FC<InputProps> = ({
     type,
     errorMessage,
     onChange,
+    value,
+    defaultValue
 }) => {
 
     return (
         <>
-            <StyledInput  type={type} data-testid={dataTestId} placeholder={placeholder} onChange={(e : ChangeEvent<HTMLInputElement & HTMLSelectElement>) => onChange(e)} />
+            <StyledInput
+                type={type}
+                data-testid={dataTestId}
+                defaultValue={defaultValue ? defaultValue : value}
+                placeholder={placeholder}
+                onChange={(e : ChangeEvent<HTMLInputElement & HTMLSelectElement>) => onChange(e)}
+            />
             {errorMessage &&  <ErrorMessage>{errorMessage}</ErrorMessage>}
         </>
     );
