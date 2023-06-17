@@ -5,9 +5,9 @@ interface CTodo {
     todo : string;
 }
 
-type UTodo = CTodo & {
+type UTodo = Partial<CTodo & {
     isCompleted : boolean
-}
+}>
 
 interface Todo {
     id : number;
@@ -28,37 +28,61 @@ export default function useTodos () {
         setTodo(e.target.value)
     }
 
-    // const updateTodo = useCallback(async ({
-    //     id,
-    //     todo,
-    //     isCompleted
-    // } : Partial <{
-    //     id : string;
-    //     todo : string;
-    //     isCompleted : boolean;
-    // }>) => {
-    //     if(!accessToken) return
+    const updateTodo = useCallback(async (id : number) => {
+        if(!accessToken) return
 
-    //     const newData : Partial<UTodo> = {}
+        const newData : UTodo = {}
 
-    //     newData.todo = todo
-    //     newData.isCompleted = isCompleted
+        if(todo) newData.todo = todo
 
-    //     try {
-    //         const response = await Axios.use<UTodo, Todo>({
-    //             method : 'post',
-    //             url : `/todos/${id}`,
-    //             data : newData,
-    //             headers : {
-    //                 "Content-Type" : 'application/json',
-    //                 Authorization : `Bearer ${accessToken}`
-    //             }
-    //         })
-    //     } catch (error) {
-    //         console.log(error)
-    //     }
+        try {
+            const response = await Axios.use<UTodo, Todo>({
+                method : 'post',
+                url : `/todos/${id}`,
+                data : newData,
+                headers : {
+                    "Content-Type" : 'application/json',
+                    Authorization : `Bearer ${accessToken}`
+                }
+            })
+        } catch (error) {
+            console.log(error)
+        }
 
-    // }, [accessToken])
+    }, [accessToken, todo])
+
+    const checkTodo = useCallback(async (id : number, currentTodo : string ,isCompleted : boolean) => {
+        if(!accessToken) return
+
+        const newData : UTodo = {}
+
+        newData.todo = currentTodo
+        newData.isCompleted = !isCompleted
+
+        try {
+            const response = await Axios.use<UTodo, Todo>({
+                method : 'put',
+                url : `/todos/${id}`,
+                data : newData,
+                headers : {
+                    "Content-Type" : 'application/json',
+                    Authorization : `Bearer ${accessToken}`
+                }
+            })
+
+            const newTodos = [...todos].map((todo) => {
+                if(todo.id === id) {
+                    return response.data
+                }
+                return todo
+            })
+
+            setTodos(newTodos)
+        } catch (error) {
+            console.log(error)
+        }
+
+    }, [accessToken, todos])
 
     const createTodo = useCallback(async() => {
         if(!accessToken) return
@@ -77,7 +101,7 @@ export default function useTodos () {
             })
 
             setTodos((prev) => [...prev, response.data])
-            setTodo('')
+            // setTodo('')
         } catch (error) {
             console.log(error)
         }
@@ -129,6 +153,7 @@ export default function useTodos () {
         handleTodo,
         createTodo,
         deleteTodo,
+        checkTodo,
         refetchTodo : fetchTodoData
     }
 

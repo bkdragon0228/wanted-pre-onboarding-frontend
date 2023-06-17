@@ -10,7 +10,11 @@ import Button from '../../components/Button/Button';
 const TodoPage = () => {
     useAuth(true)
 
-    const {todo, todos, handleTodo, createTodo, refetchTodo, deleteTodo} = useTodos()
+    const {todo, todos, handleTodo, createTodo, refetchTodo, deleteTodo, checkTodo} = useTodos()
+
+    const handleCheck = (id : number, currentTodo : string ,isCompleted : boolean) => {
+        checkTodo(id, currentTodo, isCompleted)
+    }
 
     return (
         <div>
@@ -20,10 +24,10 @@ const TodoPage = () => {
             </div>
             <ul>
                 {todos.map((item) => (
-                        <Row>
-                            <input type='checkbox' checked={item.isCompleted} />
-                            <p>{item.todo}</p>
-                            <button onClick={() => deleteTodo(item.id)}>X</button>
+                        <Row key={item.id}>
+                            <input type='checkbox' checked={item.isCompleted} onChange={() => handleCheck(item.id, item.todo, item.isCompleted)}/>
+                            <Todo>{item.todo}</Todo>
+                            <DeleteBtn onClick={() => deleteTodo(item.id)}>X</DeleteBtn>
                         </Row>
                 ))}
             </ul>
@@ -37,4 +41,27 @@ const Row = styled.li`
     display: flex;
     flex-direction: row;
     column-gap: 1rem;
+    align-items: center;
+`
+
+const Todo = styled.p`
+    min-width: 100px;
+    max-width: 200px;
+    text-align: center;
+    &:hover {
+        text-decoration: underline;
+    }
+`
+
+const DeleteBtn = styled.button`
+    width: 50px;
+    height: 50px;
+    background-color: transparent;
+    text-align: center;
+    border: none;
+    border-radius: 50%;
+
+    &:hover {
+        background-color: lightgray;
+    }
 `

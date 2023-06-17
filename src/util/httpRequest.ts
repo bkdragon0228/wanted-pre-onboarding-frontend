@@ -32,13 +32,13 @@ class HttpRequest {
         );
     }
 
-    async use<TData extends Record<keyof TData, any> = {}, TResponse extends Record<keyof TResponse, any> = {}>({
+    async use<TData extends Partial<Record<keyof TData, any>> = {}, TResponse extends Record<keyof TResponse, any> = {}>({
         method,
         url,
         data,
         headers
     } : {
-        method : 'get' | 'post' | 'delete' | 'patch',
+        method : 'get' | 'post' | 'delete' | 'patch' | 'put',
         url : string;
         data? : TData;
         headers? : RawAxiosRequestHeaders;

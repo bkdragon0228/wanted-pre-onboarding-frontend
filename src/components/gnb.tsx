@@ -15,7 +15,7 @@ const Gnb = () => {
         <NavigationBar>
             {
                 navigationList.map(({label, path }) => (
-                    <Link to={path}>{label}</Link>
+                    <Link to={path} key={path}>{label}</Link>
                 ))
             }
         </NavigationBar>
