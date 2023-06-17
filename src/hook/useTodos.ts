@@ -9,7 +9,7 @@ type UTodo = Partial<CTodo & {
     isCompleted : boolean
 }>
 
-interface Todo {
+export interface Todo {
     id : number;
     todo : string;
     isCompleted : boolean;

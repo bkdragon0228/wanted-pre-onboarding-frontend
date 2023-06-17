@@ -1,19 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import styled from '@emotion/styled';
 import useAuth from '../../hook/useAuth';
 import useTodos from '../../hook/useTodos';
 
 import Input from '../../components/Input/Input';
 import Button from '../../components/Button/Button';
+import TodoItem from '../../components/Todo/TodoItem';
 
 const TodoPage = () => {
     useAuth(true)
 
     const {todo, todos, handleTodo, createTodo, refetchTodo, deleteTodo, checkTodo} = useTodos()
 
-    const handleCheck = (id : number, currentTodo : string ,isCompleted : boolean) => {
-        checkTodo(id, currentTodo, isCompleted)
+    const handleCheck = <T extends {id : number, currentTodo : string; isCompleted : boolean}>(arg : T) => {
+        checkTodo(arg.id, arg.currentTodo, arg.isCompleted)
+    }
+
+    const handleDelete = <T extends {id : number}>({id} : T) => {
+        deleteTodo(id)
     }
 
     return (
@@ -23,13 +27,13 @@ const TodoPage = () => {
                 <Button type='button' dataTestId='new-todo-add-button' onClick={createTodo} label='할 일 추가' disabled={todo.length <= 0}/>
             </div>
             <ul>
-                {todos.map((item) => (
-                    <Row key={item.id}>
-                        <input type='checkbox' checked={item.isCompleted} onChange={() => handleCheck(item.id, item.todo, item.isCompleted)}/>
-                        <Todo>{item.todo}</Todo>
-                        <UpdateBtn data-testid="modify-button">수정하기</UpdateBtn>
-                        <DeleteBtn data-testid="delete-button" onClick={() => deleteTodo(item.id)} >X</DeleteBtn>
-                    </Row>
+                {todos.map((todo) => (
+                   <TodoItem
+                        key={todo.id}
+                        handleCheck={handleCheck}
+                        handleDelete={handleDelete}
+                        todo={todo}
+                   />
                 ))}
             </ul>
         </div>
@@ -38,41 +42,3 @@ const TodoPage = () => {
 
 export default TodoPage;
 
-const Row = styled.li`
-    display: flex;
-    flex-direction: row;
-    column-gap: 1rem;
-    align-items: center;
-`
-
-const Todo = styled.p`
-    min-width: 100px;
-    max-width: 500px;
-    text-align: center;
-    &:hover {
-        text-decoration: underline;
-    }
-`
-
-const DeleteBtn = styled.button`
-    width: 50px;
-    height: 50px;
-    background-color: transparent;
-    text-align: center;
-    border: none;
-    border-radius: 50%;
-
-    &:hover {
-        background-color: lightgray;
-    }
-`
-const UpdateBtn = styled.button`
-    width: 100px;
-    padding: 10px;
-    text-align: center;
-    background-color: dodgerblue;
-    color : white;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-`
