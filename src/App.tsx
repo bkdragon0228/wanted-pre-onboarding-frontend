@@ -10,7 +10,7 @@ function App() {
   return (
     <div className="App">
       <Gnb />
-      <main>
+      <main style={{width : '1200px', margin : '0 auto'}}>
         {elem}
       </main>
     </div>

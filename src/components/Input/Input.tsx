@@ -28,6 +28,7 @@ const Input : React.FC<InputProps> = ({
                 type={type}
                 data-testid={dataTestId}
                 defaultValue={defaultValue ? defaultValue : value}
+                value={value}
                 placeholder={placeholder}
                 onChange={(e : ChangeEvent<HTMLInputElement & HTMLSelectElement>) => onChange(e)}
             />
