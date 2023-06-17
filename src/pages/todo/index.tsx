@@ -20,19 +20,20 @@ const TodoPage = () => {
         <div>
             <div>
                 <Input type='text' dataTestId='new-todo-input' placeholder='할 일을 입력해주세요.' onChange={handleTodo}/>
-                <Button type='button' dataTestId='new-todo-add-button' onClick={createTodo} label='할 일 추가'/>
+                <Button type='button' dataTestId='new-todo-add-button' onClick={createTodo} label='할 일 추가' disabled={todo.length <= 0}/>
             </div>
             <ul>
                 {todos.map((item) => (
-                        <Row key={item.id}>
-                            <input type='checkbox' checked={item.isCompleted} onChange={() => handleCheck(item.id, item.todo, item.isCompleted)}/>
-                            <Todo>{item.todo}</Todo>
-                            <DeleteBtn onClick={() => deleteTodo(item.id)}>X</DeleteBtn>
-                        </Row>
+                    <Row key={item.id}>
+                        <input type='checkbox' checked={item.isCompleted} onChange={() => handleCheck(item.id, item.todo, item.isCompleted)}/>
+                        <Todo>{item.todo}</Todo>
+                        <UpdateBtn data-testid="modify-button">수정하기</UpdateBtn>
+                        <DeleteBtn data-testid="delete-button" onClick={() => deleteTodo(item.id)} >X</DeleteBtn>
+                    </Row>
                 ))}
             </ul>
         </div>
-    );
+    )
 };
 
 export default TodoPage;
@@ -64,4 +65,14 @@ const DeleteBtn = styled.button`
     &:hover {
         background-color: lightgray;
     }
+`
+const UpdateBtn = styled.button`
+    width: 100px;
+    padding: 10px;
+    text-align: center;
+    background-color: dodgerblue;
+    color : white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
 `
