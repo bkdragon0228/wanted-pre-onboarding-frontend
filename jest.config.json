@@ -1,0 +1,11 @@
+{
+    "roots": ["<rootDir>/test/"],
+    "testEnvironment": "jsdom",
+    "moduleNameMapper": {
+        "\\.(css|less|scss|sass|svg)$": "identity-obj-proxy"
+    },
+    "setupFilesAfterEnv": ["<rootDir>/src/setupTests.ts", "jest-plugin-context/setup", "jest-mock-console/dist/setupTestFramework.js"],
+    "transform": {
+        "^.+\\.tsx?$": "ts-jest"
+    }
+  }
