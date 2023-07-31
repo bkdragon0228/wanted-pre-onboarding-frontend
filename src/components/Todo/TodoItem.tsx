@@ -80,7 +80,14 @@ const TodoItem: React.FC<TodoItemProps> = ({
               })
             }
           />
-          <TodoCotents isCompleted={todoItem.isCompleted}>{value}</TodoCotents>
+          <TodoCotents
+            isCompleted={todoItem.isCompleted}
+            style={
+              todoItem.isCompleted ? { textDecoration: 'line-through' } : {}
+            }
+          >
+            {value}
+          </TodoCotents>
           <UpdateBtn data-testid="modify-button" onClick={handleEdit}>
             수정
           </UpdateBtn>
