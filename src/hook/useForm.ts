@@ -22,71 +22,72 @@ type Validations<T extends {}> = Partial<Record<keyof T, Validation>>;
 export const useForm = <T extends Record<keyof T, any> = {}>(options?: {
   validations?: Validations<T>;
   initialValues?: Partial<T>;
-  onSubmit?: (data : T) => void;
+  onSubmit?: (data: T) => void;
 }) => {
-  const [data, setData] = useState<T>((options?.initialValues || {}) as T)
-  const [errors, setErrors] = useState<ErrorRecord<T>>({})
-  const [isDisabled, setIsDisabled] = useState<boolean>(false)
+  const [data, setData] = useState<T>((options?.initialValues || {}) as T);
+  const [errors, setErrors] = useState<ErrorRecord<T>>({});
+  const [isDisabled, setIsDisabled] = useState<boolean>(false);
 
-  const handleChange = <S extends unknown>(
-    key: keyof T,
-    sanitizeFn?: (value: string) => S
-  ) => (e: ChangeEvent<HTMLInputElement & HTMLSelectElement>) => {
-    const value = sanitizeFn ? sanitizeFn(e.target.value) : e.target.value
+  const handleChange =
+    <S extends unknown>(key: keyof T, sanitizeFn?: (value: string) => S) =>
+    (targetValue: string) => {
+      // const value = sanitizeFn ? sanitizeFn(e.target.value) : e.target.value;
+      const value = sanitizeFn ? sanitizeFn(targetValue) : targetValue;
 
-    const validations = options?.validations
+      const validations = options?.validations;
 
-    if (validations) {
-      let valid = true
-      const value = e.target.value
-      const newErrors: ErrorRecord<T> = {}
-      const validation = validations[key]
+      if (validations) {
+        let valid = true;
+        // const value = e.target.value;
+        const value = targetValue;
+        const newErrors: ErrorRecord<T> = {};
+        const validation = validations[key];
 
-      const pattern = validation?.pattern
-      if (pattern?.value && !RegExp(pattern.value).test(value)) {
-        valid = false
-        newErrors[key] = pattern.message
+        const pattern = validation?.pattern;
+        if (pattern?.value && !RegExp(pattern.value).test(value)) {
+          valid = false;
+          newErrors[key] = pattern.message;
+        }
+
+        const custom = validation?.custom;
+        if (custom?.isValid && !custom.isValid(value)) {
+          valid = false;
+          newErrors[key] = custom.message;
+        }
+
+        if (validation?.required?.value && !value) {
+          valid = false;
+          newErrors[key] = validation?.required?.message;
+        }
+
+        if (!valid) {
+          setErrors(newErrors);
+          setIsDisabled(true);
+        } else {
+          setErrors({});
+          setIsDisabled(false);
+        }
       }
 
-      const custom = validation?.custom
-      if (custom?.isValid && !custom.isValid(value)) {
-        valid = false
-        newErrors[key] = custom.message
-      }
-
-      if (validation?.required?.value && !value) {
-        valid = false;
-        newErrors[key] = validation?.required?.message;
-      }
-
-      if (!valid) {
-        setErrors(newErrors)
-        setIsDisabled(true)
-      } else {
-        setErrors({})
-        setIsDisabled(false)
-      }
-    }
-
-    setData({
-      ...data,
-      [key]: value,
-    })
-  }
+      setData({
+        ...data,
+        [key]: value,
+      });
+    };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (options?.onSubmit) {
-      options.onSubmit(data)
+      options.onSubmit(data);
     }
-  }
+  };
 
   return {
     data,
     handleChange,
     handleSubmit,
     errors,
-    isDisabled
-  }
-}
+    isDisabled,
+  };
+};
