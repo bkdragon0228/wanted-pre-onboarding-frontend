@@ -21,7 +21,7 @@ export interface Todo {
 export type Todos = Todo[];
 
 export default function useTodos() {
-  const accessToken = localStorage.getItem('accessToken');
+  const accessToken = window.localStorage.getItem('accessToken');
 
   const [todo, setTodo] = useState<string>('');
   const [todos, setTodos] = useState<Todos>([]);

@@ -10,10 +10,15 @@ const paths = {
   signup: '/auth/signup',
 };
 
-const getTodos = () => {
+export const getTodos = () => {
   return rest.get(`${baseUrl}${paths.todos}`, (_, res, ctx) => {
     return res(ctx.status(200), ctx.json(sampleTodos));
   });
 };
 
+export const getTodosFail = () => {
+  return rest.get(`${baseUrl}${paths.todos}`, (_, res, ctx) => {
+    return res(ctx.status(400));
+  });
+};
 export const handlers = [getTodos()];
