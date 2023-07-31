@@ -18,7 +18,7 @@ export interface Todo {
   userId: number;
 }
 
-type Todos = Todo[];
+export type Todos = Todo[];
 
 export default function useTodos() {
   const accessToken = localStorage.getItem('accessToken');

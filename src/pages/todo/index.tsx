@@ -43,7 +43,7 @@ const TodoPage = () => {
   };
 
   useEffect(() => {
-    if(isLoading) return;
+    if (isLoading) return;
 
     if (!isLogin) moveToLogin();
   }, [isLogin, moveToLogin, isLoading]);
@@ -67,6 +67,7 @@ const TodoPage = () => {
         />
       </div>
       <ul>
+        {!todos.length && <div>할 일이 없습니다.</div>}
         {todos.map((todoItem) => (
           <TodoItem
             key={todoItem.id}
