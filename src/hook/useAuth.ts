@@ -1,28 +1,39 @@
-import { useEffect } from "react";
-import useMove from "./useMove";
+import { useEffect, useState } from 'react';
+import useMove from './useMove';
 
-type AuthOption = true | false | null;
+export default function useAuth(accessToken: string | null) {
+  const { moveToPage } = useMove();
 
-export default function useAuth(option : AuthOption) {
-    const { moveToPage } = useMove()
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLogin, setIsLogin] = useState<boolean>(false);
 
-    useEffect(() => {
-        const accessToken = localStorage.getItem('accessToken')
+  const moveToLogin = () => moveToPage('/signin');
 
-        if(option === null) return
+  const moveToTodo = () => moveToPage('/todo');
 
-        if(option === false) {
-            if(accessToken) {
-                alert('로그인 한 유저는 접속할 수 없습니다.')
-                moveToPage('/todo')
-            }
-        }
+  const set = async () => {
+    setIsLoading(true);
 
-        if(option === true) {
-            if(!accessToken) {
-                alert('로그인 해주세요.')
-                moveToPage('/signin')
-            }
-        }
-    }, [])
+    await new Promise((res, rej) => {
+      if (accessToken) {
+        setIsLogin(true);
+      } else {
+        setIsLogin(false);
+      }
+      res('');
+    });
+
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    set();
+  }, []);
+
+  return {
+    isLogin,
+    moveToLogin,
+    moveToTodo,
+    isLoading,
+  };
 }
