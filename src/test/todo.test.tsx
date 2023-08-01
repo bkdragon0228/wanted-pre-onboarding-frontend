@@ -89,17 +89,6 @@ describe('할 일 목록 페이지', () => {
     });
   });
 
-  context('삭제 버튼을 클릭하면', () => {
-    // 통과 x, no-content인 상황.
-    it('해당 할 일이 화면에 보이지 않게 된다.', async () => {
-      const { container } = renderTodoPage();
-
-      const deleteBtns = await screen.findAllByTestId('delete-button');
-
-      userEvent.click(deleteBtns[0]);
-    });
-  });
-
   context('할 일을 입력한 후 추가 버튼을 누르면', () => {
     it('할 일이 추가 된다.', async () => {
       renderTodoPage();

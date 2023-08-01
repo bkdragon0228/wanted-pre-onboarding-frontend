@@ -32,5 +32,5 @@ export const initalFormSetting = {
 
 export const sampleTodos: Todos = [
   { id: 1, todo: '자기', isCompleted: false, userId: 1 },
-  { id: 1, todo: '일어나기', isCompleted: false, userId: 1 },
+  { id: 2, todo: '일어나기', isCompleted: false, userId: 1 },
 ];
