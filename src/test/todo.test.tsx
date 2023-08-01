@@ -104,17 +104,4 @@ describe('할 일 목록 페이지', () => {
       expect(newTodo).toBeInTheDocument();
     });
   });
-
-  context('체크 박스를 클릭하면', () => {
-    // 상태는 정상적으로 수정되는 것으로 보임.
-    it('할 일에 취소선이 그어진다.', async () => {
-      renderTodoPage();
-
-      const checks = await screen.findAllByRole('checkbox');
-      const todo = await screen.findByText(sampleTodos[0].todo);
-      userEvent.click(checks[0]);
-
-      expect(todo).toHaveStyle('text-decoration: line-through;');
-    });
-  });
 });

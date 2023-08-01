@@ -55,4 +55,17 @@ describe('useTodos', () => {
       expect(result.current.todos).toHaveLength(1);
     });
   });
+
+  context('updateTodo', () => {
+    it('todo와 isCompleted의 값이 바뀐다.', async () => {
+      const { result } = await act(async () => setUpCustomHook());
+
+      await act(async () => {
+        result.current.updateTodo(1, 'changedSample', true);
+      });
+
+      expect(result.current.todos[0].todo).toBe('changedSample');
+      expect(result.current.todos[0].isCompleted).toBe(true);
+    });
+  });
 });
