@@ -38,11 +38,7 @@ describe('useTodos', () => {
 
   context('useTodos를 호출하면', () => {
     it('todo에 두개의 할 일이 들어있다.', async () => {
-      const { result } = setUpCustomHook();
-
-      await act(async () => {
-        result.current.refetchTodo();
-      });
+      const { result } = await act(async () => setUpCustomHook());
 
       expect(result.current.todos).toHaveLength(2);
     });
@@ -50,11 +46,7 @@ describe('useTodos', () => {
 
   context('deleteTodo', () => {
     it('특정 할 일이 삭제 된다.', async () => {
-      const { result } = setUpCustomHook();
-
-      await act(async () => {
-        result.current.refetchTodo();
-      });
+      const { result } = await act(async () => setUpCustomHook());
 
       await act(async () => {
         result.current.deleteTodo(1);
