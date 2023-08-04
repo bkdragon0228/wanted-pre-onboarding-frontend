@@ -11,6 +11,7 @@ import Input from '../../components/Input/Input';
 import Button from '../../components/Button/Button';
 import Axios from '../../util/httpRequest';
 import useAuth from '../../hook/useAuth';
+import { AxiosError } from 'axios';
 
 type LoginForm = RegisterForm;
 
@@ -82,7 +83,9 @@ const SigninPage = () => {
         onComplete(response.data.access_token);
       }
     } catch (error) {
-      console.log(error);
+      if (error instanceof AxiosError) {
+        window.alert(error.response?.data.message);
+      }
     }
   };
 

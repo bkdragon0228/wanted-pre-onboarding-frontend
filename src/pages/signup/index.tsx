@@ -8,6 +8,7 @@ import Input from '../../components/Input/Input';
 import Button from '../../components/Button/Button';
 import useMove from '../../hook/useMove';
 import useAuth from '../../hook/useAuth';
+import { AxiosError } from 'axios';
 
 export interface RegisterForm {
   email: string;
@@ -75,7 +76,9 @@ const SignupPage = () => {
         onComplete();
       }
     } catch (error) {
-      console.log(error);
+      if (error instanceof AxiosError) {
+        window.alert(error.response?.data.message);
+      }
     }
   };
 
